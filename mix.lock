@@ -1,0 +1,4 @@
+%{
+  "dbus": {:hex, :dbus, "0.8.0", "7c800681f35d909c199265e55a8ee4aea9ebe4acccce77a0740f89f29cc57648", [:make], [], "hexpm", "a9784f2d9717ffa1f74169144a226c39633ac0d9c7fe8cb3594aeb89c827cca5"},
+  "jason": {:hex, :jason, "1.4.4", "b9226785a9aa77b6857ca22832cffa5d5011a667207eb2a0ad56adb5db443b8a", [:mix], [{:decimal, "~> 1.0 or ~> 2.0", [hex: :decimal, repo: "hexpm", optional: true]}], "hexpm", "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b"},
+}
