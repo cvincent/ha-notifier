@@ -60,9 +60,10 @@ rec {
           );
 
         flake =
-          { self, ... }:
+          { moduleWithSystem, ... }:
           {
-            homeManagerModules.default =
+            homeManagerModules.default = moduleWithSystem (
+              { pkgs, self' }:
               { config, lib, ... }:
               let
                 cfg = config.services.${pname};
@@ -81,16 +82,17 @@ rec {
                   systemd.user.services.${pname} = {
                     Unit.Description = description;
                     Install.WantedBy = [ "multi-user.target" ];
-                    Service.ExecStart = "${self.pkgs.writeShellScript "ha-notifier" ''
+                    Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                       #!/run/current-system/sw/bin/bash
                       export RELEASE_DISTRIBUTION=none
                       export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
                       export PORT=${toString cfg.port}
-                      ${self.packages.default}/bin/ha_notifier start
+                      ${self'.packages.default}/bin/ha_notifier start
                     ''}";
                   };
                 };
-              };
+              }
+            );
           };
 
         systems = [
