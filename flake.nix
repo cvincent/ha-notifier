@@ -18,22 +18,8 @@ rec {
         elixir = beam-pkg.elixir_1_17;
         mixRelease = beam-pkg.mixRelease.override { inherit elixir; };
         elixir-ls = pkgs.elixir-ls.override { inherit elixir mixRelease; };
-      in
-      rec {
-        devShells.default = pkgs.mkShell {
-          buildInputs = [
-            elixir
-            elixir-ls
-          ];
 
-          shellHook = ''
-            echo "$(elixir --version | tr -s '\n')"
-            echo ""
-            echo "LFG."
-          '';
-        };
-
-        packages.default = mixRelease (
+        package = mixRelease (
           let
             src = ./.;
 
@@ -52,8 +38,26 @@ rec {
               ;
           }
         );
+      in
+      {
+        devShells.default = pkgs.mkShell {
+          buildInputs = [
+            elixir
+            elixir-ls
+          ];
 
-        homeManagerModules.default =
+          shellHook = ''
+            echo "$(elixir --version | tr -s '\n')"
+            echo ""
+            echo "LFG."
+          '';
+        };
+
+        packages.default = package;
+
+      }
+      // {
+        homeManagerModules =
           { config, lib, ... }:
           let
             cfg = config.services.${pname};
@@ -77,7 +81,7 @@ rec {
                   export RELEASE_DISTRIBUTION=none
                   export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
                   export PORT=${toString cfg.port}
-                  ${packages.default}/bin/ha_notifier start
+                  ${package}/bin/ha_notifier start
                 ''}";
               };
             };
