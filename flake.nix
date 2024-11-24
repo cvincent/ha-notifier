@@ -70,7 +70,6 @@ rec {
 
             config = lib.mkIf cfg.enable {
               systemd.user.services.${pname} = {
-                inherit description;
                 wantedBy = [ "multi-user.target" ];
                 script = ''
                   export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
