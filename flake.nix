@@ -53,7 +53,7 @@ rec {
           }
         );
 
-        packages.nixosModule =
+        packages.nixosModules =
           { config, lib, ... }:
           let
             cfg = config.services.${pname};
