@@ -8,8 +8,10 @@ defmodule HANotifier.Application do
 
   @impl true
   def start(_type, _args) do
+    port = Application.fetch_env!(:ha_notifier, :port)
+
     children = [
-      {Task, fn -> HANotifier.Listener.accept() end},
+      {Task, fn -> HANotifier.Listener.accept(port) end},
       {HANotifier.LibnotifyNotifier, nil}
     ]
 
