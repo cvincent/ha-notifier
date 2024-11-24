@@ -9,6 +9,7 @@ rec {
   outputs =
     inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } (
+      { moduleWithSystem, ... }:
       let
         pname = "ha-notifier";
         version = "0.1.0";
@@ -59,41 +60,39 @@ rec {
             }
           );
 
-        flake =
-          { moduleWithSystem, ... }:
-          {
-            homeManagerModules.default = moduleWithSystem (
-              { pkgs, self' }:
-              { config, lib, ... }:
-              let
-                cfg = config.services.${pname};
-              in
-              {
-                options.services.${pname} = {
-                  enable = lib.mkEnableOption pname;
-                  port = lib.mkOption {
-                    type = lib.types.port;
-                    default = 8124;
-                    description = "Port to listen for Home Assistant via the REST integration.";
-                  };
+        flake = {
+          homeManagerModules.default = moduleWithSystem (
+            { pkgs, self' }:
+            { config, lib, ... }:
+            let
+              cfg = config.services.${pname};
+            in
+            {
+              options.services.${pname} = {
+                enable = lib.mkEnableOption pname;
+                port = lib.mkOption {
+                  type = lib.types.port;
+                  default = 8124;
+                  description = "Port to listen for Home Assistant via the REST integration.";
                 };
+              };
 
-                config = lib.mkIf cfg.enable {
-                  systemd.user.services.${pname} = {
-                    Unit.Description = description;
-                    Install.WantedBy = [ "multi-user.target" ];
-                    Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
-                      #!/run/current-system/sw/bin/bash
-                      export RELEASE_DISTRIBUTION=none
-                      export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
-                      export PORT=${toString cfg.port}
-                      ${self'.packages.default}/bin/ha_notifier start
-                    ''}";
-                  };
+              config = lib.mkIf cfg.enable {
+                systemd.user.services.${pname} = {
+                  Unit.Description = description;
+                  Install.WantedBy = [ "multi-user.target" ];
+                  Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
+                    #!/run/current-system/sw/bin/bash
+                    export RELEASE_DISTRIBUTION=none
+                    export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
+                    export PORT=${toString cfg.port}
+                    ${self'.packages.default}/bin/ha_notifier start
+                  ''}";
                 };
-              }
-            );
-          };
+              };
+            }
+          );
+        };
 
         systems = [
           "x86_64-linux"
