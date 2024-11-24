@@ -53,7 +53,7 @@ rec {
           }
         );
 
-        packages.nixosModules =
+        homeManagerModules.default =
           { config, lib, ... }:
           let
             cfg = config.services.${pname};
