@@ -72,10 +72,11 @@ rec {
               systemd.user.services.${pname} = {
                 Unit.Description = description;
                 Install.WantedBy = [ "multi-user.target" ];
-                Service.ExecStart = ''
-                  RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
+                Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
+                  #!/run/current-system/sw/bin/bash
+                  export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
                   ${packages.default}/bin/ha_notifier start
-                '';
+                ''}";
                 Environment = {
                   RELEASE_DISTRIBUTION = "none";
                   PORT = toString cfg.port;
