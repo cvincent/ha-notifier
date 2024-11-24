@@ -69,7 +69,7 @@ rec {
             };
 
             config = lib.mkIf cfg.enable {
-              systemd.services.${pname} = {
+              systemd.user.services.${pname} = {
                 inherit description;
                 wantedBy = [ "multi-user.target" ];
                 script = ''
