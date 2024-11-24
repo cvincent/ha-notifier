@@ -73,7 +73,7 @@ rec {
                 Unit.Description = description;
                 Install.WantedBy = [ "multi-user.target" ];
                 Service.ExecStart = ''
-                  export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
+                  RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
                   ${packages.default}/bin/ha_notifier start
                 '';
                 Environment = {
