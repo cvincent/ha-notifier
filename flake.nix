@@ -74,7 +74,7 @@ rec {
                 Install.WantedBy = [ "multi-user.target" ];
                 Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                   #!/run/current-system/sw/bin/bash
-                  export RELEASE_DISTRIBUTION = "none";
+                  export RELEASE_DISTRIBUTION=none
                   export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
                   export PORT=${toString cfg.port}
                   ${packages.default}/bin/ha_notifier start
