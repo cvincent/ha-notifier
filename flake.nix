@@ -79,10 +79,8 @@ rec {
 
               config = lib.mkIf cfg.enable {
                 systemd.user.services.${pname} = {
-                  Unit = {
-                    Description = description;
-                    WantedBy = [ "default.target" ];
-                  };
+                  Unit.Description = description;
+                  Install.WantedBy = [ "default.target" ];
                   Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                     #!/run/current-system/sw/bin/bash
                     export RELEASE_DISTRIBUTION=none
