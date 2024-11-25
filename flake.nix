@@ -79,18 +79,18 @@ rec {
 
               config = lib.mkIf cfg.enable {
                 systemd.user.services.${pname} = {
-                  Unit = {
-                    Description = description;
-                    After = [ "network.target" ];
-                  };
+                  Unit.Description = description;
                   Install.WantedBy = [ "default.target" ];
-                  Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
-                    #!/run/current-system/sw/bin/bash
-                    export RELEASE_DISTRIBUTION=none
-                    export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
-                    export PORT=${toString cfg.port}
-                    ${self'.packages.default}/bin/ha_notifier start
-                  ''}";
+                  Service = {
+                    ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
+                      #!/run/current-system/sw/bin/bash
+                      export RELEASE_DISTRIBUTION=none
+                      export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
+                      export PORT=${toString cfg.port}
+                      ${self'.packages.default}/bin/ha_notifier start
+                    ''}";
+                    Restart = "on-failure";
+                  };
                 };
               };
             }
