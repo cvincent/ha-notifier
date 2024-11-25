@@ -82,7 +82,7 @@ rec {
                   Unit = {
                     Description = description;
                     After = [ "network.target" ];
-                    PartOf = [ "graphical.target" ];
+                    PartOf = [ "graphical-session.target" ];
                   };
                   Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                     #!/run/current-system/sw/bin/bash
