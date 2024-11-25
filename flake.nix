@@ -81,8 +81,8 @@ rec {
                 systemd.user.services.${pname} = {
                   Unit = {
                     Description = description;
-                    After = [ "network.target" ];
-                    PartOf = [ "graphical-session.target" ];
+                    After = [ "sockets.target" ];
+                    PartOf = [ "default.target" ];
                   };
                   Service.ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                     #!/run/current-system/sw/bin/bash
