@@ -90,6 +90,7 @@ rec {
                       ${self'.packages.default}/bin/ha_notifier start
                     ''}";
                     Restart = "on-failure";
+                    RestartSec = "5";
                   };
                 };
               };
