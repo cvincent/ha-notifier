@@ -26,6 +26,7 @@ defmodule HANotifier.Listener do
 
   defp serve(client) do
     {:ok, data} = :gen_tcp.recv(client, 0)
+    Logger.info("recv: #{String.trim(data)}")
     handle_line(client, data)
   end
 
@@ -49,7 +50,9 @@ defmodule HANotifier.Listener do
   end
 
   defp handle_line(client, "\r\n") do
-    :gen_tcp.send(client, "HTTP/1.1 200 OK")
+    :gen_tcp.send(client, "HTTP/1.1 200 OK\r\n")
+    :gen_tcp.send(client, "Content-Type: text/plain\r\n")
+    :gen_tcp.send(client, "Content-Length: 0\r\n")
     :gen_tcp.send(client, "\r\n")
   end
 
