@@ -11,7 +11,7 @@ defmodule HANotifier.Application do
     port = Application.fetch_env!(:ha_notifier, :port)
 
     children = [
-      {Task, fn -> HANotifier.Listener.accept(port) end},
+      {HANotifier.Listener, port},
       {HANotifier.LibnotifyNotifier, nil}
     ]
 

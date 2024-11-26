@@ -1,8 +1,14 @@
 defmodule HANotifier.Listener do
   require Logger
 
-  def accept(port \\ 8124) do
-    Logger.info("CONNECTING")
+  use Task, restart: :transient
+
+  def start_link(port \\ 8124) do
+    Task.start_link(__MODULE__, :accept, [port])
+  end
+
+  def accept(port) do
+    Logger.info("Connecting...")
 
     {:ok, socket} =
       :gen_tcp.listen(port, [:binary, packet: :line, active: false, reuseaddr: true])
