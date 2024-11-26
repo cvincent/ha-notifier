@@ -12,7 +12,7 @@ defmodule HANotifier.Application do
 
     children = [
       {HANotifier.Listener, port},
-      {HANotifier.LibnotifyNotifier, nil}
+      HANotifier.LibnotifyNotifier
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
