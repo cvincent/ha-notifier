@@ -10,7 +10,7 @@ by adding `ha_notifier` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:ha_notifier, "~> 0.1.0"}
+    {:ha_notifier, "~> 0.1.1"}
   ]
 end
 ```
