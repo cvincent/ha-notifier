@@ -45,7 +45,7 @@ rec {
                   mixFodDeps = beam-pkg.fetchMixDeps {
                     pname = "mix-deps-${pname}";
                     inherit src version;
-                    hash = "sha256-qjj1ZAGP4+QXbQTeXYb5IU8Xlhqt9WXsuWuwgCT1Hsk=";
+                    hash = "sha256-sMLIHpXEirMNiYJwLUvRv5ZJkPYJDwz6QFMGMiYDHro=";
                   };
                 in
                 {
