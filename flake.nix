@@ -80,7 +80,7 @@ rec {
               config = lib.mkIf cfg.enable {
                 systemd.user.services.${pname} = {
                   Unit.Description = description;
-                  Install.WantedBy = [ "network-online.target" ];
+                  Install.WantedBy = [ "graphical.target" ];
                   Service = {
                     ExecStart = "${pkgs.writeShellScript "ha-notifier" ''
                       export RELEASE_DISTRIBUTION=none
