@@ -12,7 +12,8 @@ defmodule HANotifier.LibnotifyNotifier do
   end
 
   def init(nil) do
-    {:ok, System.find_executable("notify-send")}
+    "" <> notify_send = System.find_executable("notify-send")
+    {:ok, notify_send}
   end
 
   def handle_cast({:notify, message}, notify_send) do
