@@ -75,6 +75,11 @@ rec {
                   default = 8124;
                   description = "Port to listen for Home Assistant via the REST integration.";
                 };
+                libnotify = lib.mkOption {
+                  type = lib.types.package;
+                  default = pkgs.libnotify;
+                  description = "libnotify package to use";
+                };
               };
 
               config = lib.mkIf cfg.enable {
@@ -86,6 +91,7 @@ rec {
                       export RELEASE_DISTRIBUTION=none
                       export RELEASE_COOKIE=$(${pkgs.coreutils}/bin/tr -dc A-Za-z0-9 < /dev/urandom | ${pkgs.coreutils}/bin/head -c 20)
                       export PORT=${toString cfg.port}
+                      export NOTIFY_SEND=${"${cfg.libnotify}/bin/notify-send"}
                       ${self'.packages.default}/bin/ha_notifier start
                     ''}";
                     Restart = "on-failure";

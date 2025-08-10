@@ -11,8 +11,7 @@ defmodule HANotifier.LibnotifyNotifier do
     GenServer.cast(__MODULE__, {:notify, message})
   end
 
-  def init(nil) do
-    "" <> notify_send = System.find_executable("notify-send")
+  def init(notify_send) do
     {:ok, notify_send}
   end
 
