@@ -3,8 +3,8 @@ defmodule HANotifier.LibnotifyNotifier do
 
   use GenServer
 
-  def start_link([]) do
-    GenServer.start_link(__MODULE__, nil, name: __MODULE__)
+  def start_link(notify_send) do
+    GenServer.start_link(__MODULE__, notify_send, name: __MODULE__)
   end
 
   def notify(message) do
