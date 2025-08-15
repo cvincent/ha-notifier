@@ -15,6 +15,8 @@ rec {
         version = "0.1.2";
       in
       {
+        debug = true;
+
         perSystem =
           { pkgs, ... }:
           (
@@ -80,6 +82,11 @@ rec {
                   default = pkgs.libnotify;
                   description = "libnotify package to use";
                 };
+                alsa-utils = lib.mkOption {
+                  type = lib.types.package;
+                  default = pkgs.alsa-utils;
+                  description = "alsa-utils package to use";
+                };
               };
 
               config = lib.mkIf cfg.enable {
@@ -92,6 +99,7 @@ rec {
                       export RELEASE_COOKIE=$(${pkgs.coreutils}/bin/tr -dc A-Za-z0-9 < /dev/urandom | ${pkgs.coreutils}/bin/head -c 20)
                       export PORT=${toString cfg.port}
                       export NOTIFY_SEND=${"${cfg.libnotify}/bin/notify-send"}
+                      export APLAY=${"${cfg.alsa-utils}/bin/aplay"}
                       ${self'.packages.default}/bin/ha_notifier start
                     ''}";
                     Restart = "on-failure";

@@ -10,10 +10,11 @@ defmodule HANotifier.Application do
   def start(_type, _args) do
     port = Application.fetch_env!(:ha_notifier, :port)
     notify_send = Application.fetch_env!(:ha_notifier, :notify_send)
+    aplay = Application.fetch_env!(:ha_notifier, :aplay)
 
     children = [
       {HANotifier.Listener, port},
-      {HANotifier.LibnotifyNotifier, notify_send}
+      {HANotifier.LibnotifyNotifier, {notify_send, aplay}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

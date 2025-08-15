@@ -11,14 +11,14 @@ defmodule HANotifier.LibnotifyNotifier do
     GenServer.cast(__MODULE__, {:notify, message})
   end
 
-  def init(notify_send) do
-    {:ok, notify_send}
+  def init({notify_send, aplay}) do
+    {:ok, {notify_send, aplay}}
   end
 
-  def handle_cast({:notify, message}, notify_send) do
+  def handle_cast({:notify, message}, {notify_send, aplay}) do
     Logger.info("Sending notification: #{inspect(message)}")
     System.cmd(notify_send, message_args(message))
-    maybe_play_sound(message)
+    maybe_play_sound(aplay, message)
     {:noreply, notify_send}
   end
 
@@ -40,10 +40,9 @@ defmodule HANotifier.LibnotifyNotifier do
     |> dbg()
   end
 
-  defp maybe_play_sound(%{"data" => %{"sound" => sound_file}}) do
-    System.find_executable("aplay")
-    |> System.cmd([sound_file])
+  defp maybe_play_sound(aplay, %{"data" => %{"sound" => sound_file}}) do
+    System.cmd(aplay, [sound_file])
   end
 
-  defp maybe_play_sound(_), do: nil
+  defp maybe_play_sound(_, _), do: nil
 end
