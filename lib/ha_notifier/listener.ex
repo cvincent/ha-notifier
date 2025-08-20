@@ -54,6 +54,7 @@ defmodule HANotifier.Listener do
     :gen_tcp.send(client, "Content-Type: text/plain\r\n")
     :gen_tcp.send(client, "Content-Length: 0\r\n")
     :gen_tcp.send(client, "\r\n")
+    :gen_tcp.close(client)
   end
 
   defp handle_line(client, _anything_else), do: serve(client)
