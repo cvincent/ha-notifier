@@ -19,7 +19,7 @@ defmodule HANotifier.LibnotifyNotifier do
     Logger.info("Sending notification: #{inspect(message)}")
     System.cmd(notify_send, message_args(message))
     maybe_play_sound(aplay, message)
-    {:noreply, notify_send}
+    {:noreply, {notify_send, aplay}}
   end
 
   defp message_args(message) do
